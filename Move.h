@@ -12,6 +12,8 @@ class Move
     int accuracy;
     int moveGen;
 
+    public: 
+
     Move() {moveNum = 0; moveName = ""; moveType = ""; category = ""; contest = ""; 
         pp = 0; power = 0; accuracy = 0; moveGen = 0;}
         
