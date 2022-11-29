@@ -16,17 +16,16 @@
 #include <sstream>
 #include <chrono>
 #include "Pokemon.cpp"
-#include "move-data.csv"
-#include "pokemon.csv"
+#include "Move.cpp"
 
 //Reading Pokemon CSV
-void ReadingCSVFile(string fileName, vector<Pokemon>& pokemon) {
+void ReadingCSVFile(std::string fileName, vector<Pokemon>& pokemon) {
 		ifstream file(fileName);
 
 	//implementation of initializing the objects for each row
 	if (file.is_open()) {
 
-		string fileRow;
+		std::string fileRow;
 		//gets the headers of the file
 		getline(file, fileRow);
 
@@ -34,28 +33,28 @@ void ReadingCSVFile(string fileName, vector<Pokemon>& pokemon) {
 
 			istringstream stringStream(fileRow);
 
-			string sPokeDexNumber;
+			std::string sPokeDexNumber;
             int pokeDexNumber;
-			string name;
-			string type1;
-            string type2;
-			string sTotal;
+			std::string name;
+			std::string type1;
+            std::string type2;
+			std::string sTotal;
 			int total;
-			string sHP;
+			std::string sHP;
 			int hp;
-			string sAttack;
+			std::string sAttack;
 			int attack;
-            string sDefense;
+            std::string sDefense;
 			int defense;
-            string sSpAttack;
+            std::string sSpAttack;
 			int spAttack;
-            string sSpDef;
+            std::string sSpDef;
 			int spDef;
-            string sSpeed;
+            std::string sSpeed;
 			int speed;
-            string sGen;
+            std::string sGen;
 			int gen;
-            string sLegendary;
+            std::string sLegendary;
 			bool legendary;
 
 
@@ -91,6 +90,7 @@ void ReadingCSVFile(string fileName, vector<Pokemon>& pokemon) {
 
 			//each object will store a row
 			Pokemon setPoke(pokeDexNumber, name, type1, type2, hp, attack, defense, sSpAttack, spDef, speed, gen, legendary);
+            setPoke.setMoves(bool isBTree);
 			pokemon.push_back(setPoke);
 
 		}
@@ -99,13 +99,13 @@ void ReadingCSVFile(string fileName, vector<Pokemon>& pokemon) {
 
 
 //reading Move Set CSV
-void ReadingCSVFile(string fileName, vector<Moves>& moves) {
+void ReadingCSVFile(std::string fileName, vector<Moves>& moves) {
 		ifstream file(fileName);
 
 	//implementation of initializing the objects for each row
 	if (file.is_open()) {
 
-		string fileRow;
+		std::string fileRow;
 		//gets the headers of the file
 		getline(file, fileRow);
 
@@ -113,19 +113,19 @@ void ReadingCSVFile(string fileName, vector<Moves>& moves) {
 
 			istringstream stringStream(fileRow);
 
-            string sMoveNum
+            std::string sMoveNum
             int moveNum;
-			string name;
-			string type;
-            string category;
-            string contest;
-            string sPP;
+			std::string name;
+			std::string type;
+            std::string category;
+            std::string contest;
+            std::string sPP;
             int pp;
-            string sPower;
+            std::string sPower;
             int power;
-            string sAccuracy;
+            std::string sAccuracy;
             int accuracy;
-            string sGen;
+            std::string sGen;
             int gen;
 
 			getline(stringStream, sMoveNum, ',');
