@@ -17,13 +17,14 @@ class Pokemon
 	int speed;
 	int pokeGen;
 	bool legendary;
-    std::vector<Move> pokemonMoves = {Move(), Move(), Move(), Move()};
+    std::vector<Move> pokemonMoves;
     
+    public:
 
     Pokemon() {pokeDexNumber = 0; pokeName = ""; pokeType1 = ""; pokeType2 = ""; total = 0; 
         hp = 0; attack = 0; defense = 0; spAttack = 0; spDef = 0; speed = 0; pokeGen = 0; legendary = false; pokemonMoves;}
 
-    Pokemon(int _pokeDexNumber, std::string _name, std::string _type1, _std::string type2, int _total, 
+    Pokemon(int _pokeDexNumber, std::string _name, std::string _type1, std::string type2, int _total, 
         int _hp, int _attack, int _defense, int _spAttack, int _spDef, int _speed, int _gen, bool _legendary);
 
     //make get functions
@@ -44,4 +45,4 @@ class Pokemon
     void setMoves();
     
 
-}
+};

@@ -1,12 +1,12 @@
 #include "Pokemon.h"
 
-    Pokemon::Pokemon(int _pokeDexNumber, std::string _name, std::string _type1, _std::string type2, int _total, 
+    Pokemon::Pokemon(int _pokeDexNumber, std::string _name, std::string _type1, std::string type2, int _total, 
         int _hp, int _attack, int _defense, int _spAttack, int _spDef, int _speed, int _gen, bool _legendary)
     {
-        pokeDexNumber = _pokeDexNumber
+        pokeDexNumber = _pokeDexNumber;
         pokeName = _name;
         pokeType1 = _type1;
-        pokeType2 = _type2;
+        pokeType2 = type2;
         total = _total;
         hp = _hp;
         attack = _attack;
@@ -14,9 +14,9 @@
         spAttack = _spAttack;
         spDef = _spDef;
         speed = _speed;
-        gen = _gen;
+        pokeGen = _gen;
         legendary = _legendary;
-        pokemonMoves;
+        pokemonMoves = {Move(), Move(), Move(), Move()};
     }
 
     int Pokemon::getPokeDexNumber()
@@ -27,7 +27,7 @@
     {
         return pokeName;
     }
-    std::string Pokemon::getType1();
+    std::string Pokemon::getType1()
     {
         return pokeType1;
     }
@@ -71,7 +71,7 @@
     {
         return legendary;
     }
-    std::vector<Move> getMoves()
+    std::vector<Move> Pokemon::getMoves()
     {
         return pokemonMoves;
     }
