@@ -13,9 +13,9 @@ class Move
     int moveGen;
 
     Move() {moveNum = 0; moveName = ""; moveType = ""; category = ""; contest = ""; 
-        pp = 0; power = 0; accuracy = 0; gen = 0;}
+        pp = 0; power = 0; accuracy = 0; moveGen = 0;}
         
-    Move(int _moveNum, string _name, string _type, string _category, string _contest,
+    Move(int _moveNum, std::string _name, std::string _type, std::string _category, std::string _contest,
         int _pp, int _power, int _accuracy,int _gen);
 
     //make get functions
@@ -28,4 +28,4 @@ class Move
     int getPower();
     int getAccuracy();
     int getMoveGen();
-}
+};
