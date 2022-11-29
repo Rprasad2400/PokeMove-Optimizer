@@ -1,6 +1,6 @@
 #include "Move.h"
     
-Move(int _moveNum, string _name, string _type, string _category, string _contest,
+Move::Move(int _moveNum, std::string _name, std::string _type, std::string _category, std::string _contest,
         int _pp, int _power, int _accuracy,int _gen)
     {
         moveNum = _moveNum;
@@ -15,7 +15,7 @@ Move(int _moveNum, string _name, string _type, string _category, string _contest
     }
 
     //make get functions
-    int Move::getMoveNum();
+    int Move::getMoveNum()
     {
         return moveNum;
     }
