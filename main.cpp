@@ -16,8 +16,12 @@
 #include <sstream>
 #include <chrono>
 #include <algorithm>
+#include <queue>
+#include <time.h>
 #include "Pokemon.cpp"
 #include "Move.h"
+#include "BTree.h"
+#include "HashMap.h"
 
 //Reading Pokemon CSV
 void ReadingCSVFile(std::string fileName, std::vector<Pokemon>& pokemon) {
@@ -167,7 +171,79 @@ void ReadingCSVFile(std::string fileName, std::vector<Move>& moves) {
 	}
 }
 
-bool binarySearch(std::vector<Pokemon>& _pokemon, std::string target)
+//For fabricating more moves
+void ReadingBabyNameCSVFile(std::string babyFile, std::vector<Move>& moves)
+{
+    //use this for the move index
+    std::ifstream file(babyFile);
+
+    //implementation of initializing the objects for each row
+    if (file.is_open()) 
+    {
+
+        std::string fileRow;
+        //gets the headers of the file
+        getline(file, fileRow);
+        int moveIndexIterator = 729;
+
+        while (getline(file, fileRow) && moveIndexIterator < 150000) 
+        {
+            std::istringstream stringStream(fileRow);
+            std::srand(time(NULL));
+            int randomIndex;
+
+            std::string index;
+            std::string babyMoveName;
+
+            getline(stringStream, index, ',');
+            getline(stringStream, babyMoveName, ',');
+			babyMoveName += index;
+            getline(stringStream, fileRow);
+
+			//The rest is to fabricate more data points to fit into the >100000 data point requirement
+            std::string possibleTypes[18] = { "Normal", "Fire", "Water", "Grass", "Electric", 
+                "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost",
+                "Dark", "Dragon", "Steel", "Fairy"};
+            randomIndex = rand() % 18;
+            std::string type = possibleTypes[randomIndex];
+
+            std::string possibleCategories[2] = { "Physical", "Special"};
+            randomIndex = rand() % 2;
+            std::string category = possibleCategories[randomIndex];
+
+            std::string contest = "???";
+
+            int possiblePP[9] = {1, 5, 10, 15, 20, 25, 30, 35, 40};
+            randomIndex = rand() % 9;
+            int pp = possiblePP[randomIndex];
+
+            int possibleAttacks[50] = {0, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 
+				80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 
+				165, 170, 175, 180, 185, 190, 195, 200, 205, 210, 215, 220, 225, 230, 235, 240, 
+				245, 250};
+
+            randomIndex = rand() % 50;
+            int attack = possibleAttacks[randomIndex];
+
+            int possibleAccuracy[16] = {0, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100};
+            randomIndex = rand() % 16;
+            int accuracy = possibleAccuracy[randomIndex];
+			int generation = 0;
+
+            Move setMove(moveIndexIterator, babyMoveName, type, category, contest, pp, attack, accuracy, generation);
+            moves.push_back(setMove);
+			moveIndexIterator++;
+        }
+    }
+
+
+
+    //in csv file, do this and store it into another variable, then do the same for the rest, then use the variables for the construction
+    //after that add it into the vector
+}
+
+
+int binarySearch(std::vector<Pokemon>& _pokemon, std::string target)
 {
 	int left = 0;
 	int mid = 0;
@@ -177,7 +253,7 @@ bool binarySearch(std::vector<Pokemon>& _pokemon, std::string target)
 	{
 		if (target == _pokemon[mid].getName())
 		{
-			return true;
+			return mid;
 		}
 
 		mid = left + (right - 1) / 2;
@@ -190,52 +266,103 @@ bool binarySearch(std::vector<Pokemon>& _pokemon, std::string target)
 			right = mid;
 		}
 	}
-	return false;
+	return -1;
 }
 
 int main()
 {
+	using std::chrono::milliseconds;
     std::vector<Pokemon> pokemon;
     std::vector<Move> moveSet;
-    std::vector<Move> selectedMoves;
+	std::vector<Move> optimalBTreeMoves;
+	std::vector<Move> optimalHashMapMoves;
+	//std::priority_queue <Move, std::vector<Move>, HigherPower> selectedMovesPrio;
+
 
     ReadingCSVFile("pokemon.csv", pokemon);
     ReadingCSVFile("move-data.csv", moveSet);
+	ReadingBabyNameCSVFile("NationalNames.csv", moveSet);
+	//int size = moveSet.size();
+	//std::cout << moveSet[140001].getMoveName() << std::endl;
+	/*
+    selectedMovesPrio.push(moveSet[0]);
+	selectedMovesPrio.push(moveSet[100]);
+	selectedMovesPrio.push(moveSet[1000]);
+	selectedMovesPrio.push(moveSet[300]);
 
-    
+	Move move = selectedMovesPrio.top();
+	std::cout << move.getMoveName() << std::endl;
+	selectedMovesPrio.pop();
+
+	move = selectedMovesPrio.top();
+	std::cout << move.getMoveName() << std::endl;
+	selectedMovesPrio.pop();
+
+	move = selectedMovesPrio.top();
+	std::cout << move.getMoveName() << std::endl;
+	*/
+
+	//just to sort and find the Pokemon faster, we are comparing the data structure through moves
     sort(pokemon.begin(), pokemon.end(), [](Pokemon& poke1, Pokemon& poke2)
     {
         return poke1.getName() < poke2.getName();
     });
-    //Here is where we will do the b tree and hash map?
-
-
-    std::string selectedPokemon;
+    
+    
+	std::string selectedPokemon;
     std::cout << "Enter a Pokemon (case-sensitive): ";
     std::cin >> selectedPokemon;
     
-	if (!binarySearch(pokemon, selectedPokemon))
+	int foundPokemon = binarySearch(pokemon, selectedPokemon);
+	std::cout << pokemon[foundPokemon].getName() << std::endl;
+
+	if (foundPokemon == -1)
 	{
 		std::cout << "Pokemon not found!";
 	}
+
 	else
 	{
-		//do the thing
+		//Testing out B-Tree searching
+    	auto start = std::chrono::high_resolution_clock::now();
+		optimalBTreeMoves = search(pokemon[foundPokemon]);
+    	auto end = std::chrono::high_resolution_clock::now();
+		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+		std::cout << "Finding optimal moves through B-Tree: " << diff.count() << " milliseconds" << std::endl;	
+		std::cout << "Possible Optimal Moveset with B-Tree " << selectedPokemon  << ": "<< std::endl; 
+		/*
+		std::cout << "1. " << optimalMovesBTree[0].getMoveName() << std::endl << 
+		"2. " << optimalMovesBTree[1].getMoveName() << std::endl <<
+		"3. " << optimalMovesBTree[2].getMoveName() << std::endl <<
+		"4. " << optimalMovesBTree[3].getMoveName() << std::endl << std::endl;
+		*/
+
+		//Testing out Hashmap searching
+		auto start = std::chrono::high_resolution_clock::now();
+		optimalHashMapMoves = searchBestMove(pokemon[foundPokemon]);
+		auto end = std::chrono::high_resolution_clock::now();
+		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+		std::cout << "Finding optimal moves through Hashmap: " << diff.count() << " milliseconds" << std::endl;	
+		std::cout << "Possible Optimal Moveset with Hashmap " << selectedPokemon  << ": "<< std::endl; 
+		/*
+		std::cout << "1. " << optimalHashMapMoves[0].getMoveName() << std::endl << 
+		"2. " << optimalHashMapMoves[1].getMoveName() << std::endl <<
+		"3. " << optimalHashMapMoves[2].getMoveName() << std::endl <<
+		"4. " << optimalHashMapMoves[3].getMoveName() << std::endl;
+		*/
+
+		/*
+		if (pokemon[foundPokemon].getType1() > pokemon[foundPokemon].getSpAttack())
+		{
+			//search for the move that is physical and has higher power
+			searchfunction(category "physical")
+		}
+		else
+		{
+			//search for the move that is special and has higher power
+			searchfunction(category "special")
+		}
+		*/
 	}
-    //search if the selectedPokemon is in the b-tree or hash-map, maybe time it here to show the search timing
 
-    //determine how to pick and select moves, but put it into the vector
-
-	//when comparing the moves to determine what is best, we need to do an stoi on power based on if it is (!= "None" as some moves do not do damage, for accuracy 
-	//same thing if that is taken into consideration)
-
-
-    //basically what is used to time the functions vvvv
-    auto start = std::chrono::steady_clock::now();
-    //instert into hash and b tree
-    auto end = std::chrono::steady_clock::now();
-
-    auto diff = end - start;
-
-    
-}
+};
