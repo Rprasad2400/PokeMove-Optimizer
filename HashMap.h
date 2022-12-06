@@ -36,6 +36,8 @@ private:
 public:
 	Move get(string key);
 	void remove(string key);
+	vector<Move> searchBestMove(string typemove);
+    	vector<Move> searchBestMove(string typemove,string typemove2);
 	void insert(Move value);
 
 };
