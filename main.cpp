@@ -325,6 +325,13 @@ int main()
 	else
 	{
 		//Testing out BTree searching
+				//Testing out BTree searching
+		for (int i = 0; i < moveSet.size(); i++)
+		{
+			B.insert(moveSet[i]);
+			H.insert(moveSet[i]);
+		}
+		
     	auto start = std::chrono::high_resolution_clock::now();
 		optimalBTreeMoves = B.search(pokemon[foundPokemon]);
     	auto end = std::chrono::high_resolution_clock::now();
