@@ -330,12 +330,12 @@ int main()
 		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 		std::cout << "Finding optimal moves through B-Tree: " << diff.count() << " milliseconds" << std::endl;	
 		std::cout << "Possible Optimal Moveset with B-Tree " << selectedPokemon  << ": "<< std::endl; 
-		/*
+		
 		std::cout << "1. " << optimalMovesBTree[0].getMoveName() << std::endl << 
 		"2. " << optimalMovesBTree[1].getMoveName() << std::endl <<
 		"3. " << optimalMovesBTree[2].getMoveName() << std::endl <<
 		"4. " << optimalMovesBTree[3].getMoveName() << std::endl << std::endl;
-		*/
+		
 
 		//Testing out Hashmap searching
 		auto start = std::chrono::high_resolution_clock::now();
@@ -344,12 +344,12 @@ int main()
 		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 		std::cout << "Finding optimal moves through Hashmap: " << diff.count() << " milliseconds" << std::endl;	
 		std::cout << "Possible Optimal Moveset with Hashmap " << selectedPokemon  << ": "<< std::endl; 
-		/*
+		
 		std::cout << "1. " << optimalHashMapMoves[0].getMoveName() << std::endl << 
 		"2. " << optimalHashMapMoves[1].getMoveName() << std::endl <<
 		"3. " << optimalHashMapMoves[2].getMoveName() << std::endl <<
 		"4. " << optimalHashMapMoves[3].getMoveName() << std::endl;
-		*/
+		
 
 		/*
 		if (pokemon[foundPokemon].getType1() > pokemon[foundPokemon].getSpAttack())
