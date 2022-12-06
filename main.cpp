@@ -19,9 +19,9 @@
 #include <queue>
 #include <time.h>
 #include "Pokemon.cpp"
-#include "Move.h"
-#include "BTree.h"
-#include "HashMap.h"
+#include "Move.cpp"
+#include "BTree.cpp"
+#include "HashMap.cpp"
 
 //Reading Pokemon CSV
 void ReadingCSVFile(std::string fileName, std::vector<Pokemon>& pokemon) {
@@ -276,6 +276,8 @@ int main()
     std::vector<Move> moveSet;
 	std::vector<Move> optimalBTreeMoves;
 	std::vector<Move> optimalHashMapMoves;
+	BTree B;
+	HashMap H;
 	//std::priority_queue <Move, std::vector<Move>, HigherPower> selectedMovesPrio;
 
 
@@ -322,12 +324,12 @@ int main()
 	}
 	else
 	{
-		//Testing out B-Tree searching
-    	auto startB = std::chrono::high_resolution_clock::now();
-		optimalBTreeMoves = search(pokemon[foundPokemon]);
-    	auto endB = std::chrono::high_resolution_clock::now();
-		auto diffB = std::chrono::duration_cast<std::chrono::milliseconds>(endB - startB);
-		std::cout << "Finding optimal moves through B-Tree: " << diffB.count() << " milliseconds" << std::endl;	
+		//Testing out BTree searching
+    	auto start = std::chrono::high_resolution_clock::now();
+		optimalBTreeMoves = B.search(pokemon[foundPokemon]);
+    	auto end = std::chrono::high_resolution_clock::now();
+		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+		std::cout << "Finding optimal moves through B-Tree: " << diff.count() << " milliseconds" << std::endl;	
 		std::cout << "Possible Optimal Moveset with B-Tree " << selectedPokemon  << ": "<< std::endl; 
 
 		std::cout << "1. " << optimalBTreeMoves[0].getMoveName() << std::endl << 
@@ -336,12 +338,12 @@ int main()
 		"4. " << optimalBTreeMoves[3].getMoveName() << std::endl << std::endl;
 		
 
-		//Testing out Hashmap searching
-		auto starthash = std::chrono::high_resolution_clock::now();
-		optimalHashMapMoves = searchBestMove(pokemon[foundPokemon]);
-		auto endhash = std::chrono::high_resolution_clock::now();
-		auto diffhash = std::chrono::duration_cast<std::chrono::milliseconds>(endhash - starthash);
-		std::cout << "Finding optimal moves through Hashmap: " << diffhash.count() << " milliseconds" << std::endl;	
+		//Testing out Hashmap 
+		start = std::chrono::high_resolution_clock::now();
+		optimalHashMapMoves = H.searchBestMove(pokemon[foundPokemon]);
+		end = std::chrono::high_resolution_clock::now();
+		diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+		std::cout << "Finding optimal moves through Hashmap: " << diff.count() << " milliseconds" << std::endl;	
 		std::cout << "Possible Optimal Moveset with Hashmap " << selectedPokemon  << ": "<< std::endl; 
 		
 		std::cout << "1. " << optimalHashMapMoves[0].getMoveName() << std::endl << 
