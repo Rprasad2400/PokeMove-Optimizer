@@ -1,5 +1,6 @@
 #include "HashMap.h";
 #include "Move.h";
+#include "Pokemon.h";
 void HashMap::insertNode(Node* k, Move move) {
 
 	while (!(k->next == nullptr)) {
