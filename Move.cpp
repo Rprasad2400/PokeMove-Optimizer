@@ -1,4 +1,5 @@
 #include "Move.h"
+#pragma once
     
 Move::Move(int _moveNum, std::string _name, std::string _type, std::string _category, std::string _contest,
         int _pp, int _power, int _accuracy,int _gen)

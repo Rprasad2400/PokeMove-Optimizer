@@ -1,4 +1,5 @@
 #include "Pokemon.h"
+#pragma once
 
     Pokemon::Pokemon(int _pokeDexNumber, std::string _name, std::string _type1, std::string type2, int _total, 
         int _hp, int _attack, int _defense, int _spAttack, int _spDef, int _speed, int _gen, bool _legendary)

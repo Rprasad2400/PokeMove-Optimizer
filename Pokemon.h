@@ -1,6 +1,7 @@
 #include <string>
 #include "Move.cpp"
 #include <vector>
+#pragma once
 
 class Pokemon
 {
