@@ -4,6 +4,7 @@
 #include<iostream>
 #include<string>
 #include "Move.h";
+#include "Pokemon.h";
 using namespace std;
 class HashMap {
 
@@ -36,8 +37,7 @@ private:
 public:
 	Move get(string key);
 	void remove(string key);
-	vector<Move> searchBestMove(string typemove);
-    	vector<Move> searchBestMove(string typemove,string typemove2);
+  	vector<Move> searchBestMove(Pokemon poke);
 	void insert(Move value);
 
 };
