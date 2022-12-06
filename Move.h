@@ -30,4 +30,5 @@ class Move
     int getPower();
     int getAccuracy();
     int getMoveGen();
+    bool operator<(Move b);
 };
