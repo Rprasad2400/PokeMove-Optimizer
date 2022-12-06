@@ -51,3 +51,7 @@ Move::Move(int _moveNum, std::string _name, std::string _type, std::string _cate
     {
         return moveGen;
     }
+
+    bool Move::operator<(Move b){
+        return this->power < b.getPower();
+    }
