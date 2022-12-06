@@ -65,29 +65,60 @@ void BTree::insert(Move key){
 BTree::TreeNode* BTree::helperInsert(TreeNode* helpRoot, Move key){
 //try to make it recursive, return and update pointer and children values 
 
-    if (helpRoot == nullptr){                                           //this should never be the case, but checking just in case
+    if (helpRoot == nullptr){
+    //this should never be the case, but checking just in case
         std::cout << "Reached a null node" << std::endl;
         return;
-    } else if (helpRoot->children.size() != 0){                         //if the node has children, append to those instead
-
-        for (int i = 0; i < helpRoot->values.size(); i++){              //numbers of pointers = number of keys + 1, so pointer array values
-                                                                        //line up with the comparison values
+    } else if (helpRoot->children.size() != 0){                         
+        //if the node has children, append to those instead
+        int i = 0;
+        bool traversed = false;
+        TreeNode* temp = nullptr;
+        for (;i < helpRoot->values.size(); i++){              
+            //numbers of pointers = number of keys + 1, so pointer array values line up with the comparison values
             if (helpRoot->values[i].getPower() > key.getPower()){       
-                                                                        //if a node has been found to be a greater value, traverse the child path before it
-                //need some way to differ between normal return and split return
-                //add code block for balanced insertion
+                 //if a node has been found to be a greater value, traverse the child path before it
+               temp = helperInsert(helpRoot->children[i], key);
+               break; //only use immediately greater value 
             }
-            
-            //balanced insertion code block, same as above              //if end of children, node value is greater, go to end value 
-
         }
+        //if end of children, node value is greater, go to end value 
+        if (!traversed){
+            temp = helperInsert(helpRoot->children[i], key);
+        }
+
+        //by this point, the node should have been added to any one of the children of helpRoot
+        //check for split returns
+        if (temp != nullptr && temp->values.size() <= 1){   
+            int x = 0;
+            bool added = false;
+            for (; x < helpRoot->values.size(); x++){
+                if(helpRoot->values[x].getPower() > temp->values[0].getPower()){
+                        helpRoot->values.insert(helpRoot->values.begin(), x, temp->values[0]);
+                        helpRoot->children[x] = temp->children[0];
+                        helpRoot->children.insert(helpRoot->children.begin(), x+1, temp->children[1]);
+                        added = true;
+                        break;
+                }
+            }
+            if (!added){
+                helpRoot->values.insert(helpRoot->values.begin(), x, temp->values[0]);
+                helpRoot->children[x] = temp->children[0];
+                helpRoot->children.insert(helpRoot->children.begin(), x+1, temp->children[1]);
+            }
+        } 
+        //if no split occurred, no special function is needed
     } else {
         helpRoot->children.push_back(&TreeNode(key));
         std::sort(helpRoot->children.begin(), helpRoot->children.end());
-        if(helpRoot->children.size() > MAXKEYS){
-            //split the children into two parts, down the middle (element 5 will always be the middle)
-            //bring the new element up, let the left pointer go to new node of elements 0 - 4, right pointer to new node of elements 6 to 10
-        }    
     }
+
+    if(helpRoot->children.size() > MAXKEYS){
+        //split the children into two parts, down the middle (element 5 will always be the middle)
+        //bring the new element up, let the left pointer go to new node of elements 0 - 4, right pointer to new node of elements 6 to 10
+
+        
+    }    
+    return helpRoot;
 }
 
