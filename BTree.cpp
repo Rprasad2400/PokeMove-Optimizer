@@ -116,8 +116,19 @@ BTree::TreeNode* BTree::helperInsert(TreeNode* helpRoot, Move key){
     if(helpRoot->children.size() > MAXKEYS){
         //split the children into two parts, down the middle (element 5 will always be the middle)
         //bring the new element up, let the left pointer go to new node of elements 0 - 4, right pointer to new node of elements 6 to 10
+        TreeNode temp1 = TreeNode(helpRoot->values[MAXKEYS/2]);
+        TreeNode temp2 = TreeNode();
+        TreeNode temp3 = TreeNode();
+        for (int a = 0; a < MAXKEYS/2; a++){
+            temp2.values.push_back(helpRoot->values[a]);
+        }
+        for (int b = MAXKEYS/2 + 1; b < helpRoot->values.size(); b++){
+            temp3.values.push_back(helpRoot->values[b]);
+        }
 
-        
+        temp1.children.push_back(&temp2);
+        temp1.children.push_back(&temp3);
+        helpRoot = &temp1;
     }    
     return helpRoot;
 }
