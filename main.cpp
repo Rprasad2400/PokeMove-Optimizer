@@ -15,12 +15,13 @@
 #include <vector>
 #include <sstream>
 #include <chrono>
+#include <algorithm>
 #include "Pokemon.cpp"
-#include "Move.cpp"
+#include "Move.h"
 
 //Reading Pokemon CSV
-void ReadingCSVFile(std::string fileName, vector<Pokemon>& pokemon) {
-		ifstream file(fileName);
+void ReadingCSVFile(std::string fileName, std::vector<Pokemon>& pokemon) {
+		std::ifstream file(fileName);
 
 	//implementation of initializing the objects for each row
 	if (file.is_open()) {
@@ -31,7 +32,7 @@ void ReadingCSVFile(std::string fileName, vector<Pokemon>& pokemon) {
 
 		while (getline(file, fileRow)) {
 
-			istringstream stringStream(fileRow);
+			std::istringstream stringStream(fileRow);
 
 			std::string sPokeDexNumber;
             int pokeDexNumber;
@@ -63,21 +64,22 @@ void ReadingCSVFile(std::string fileName, vector<Pokemon>& pokemon) {
 			getline(stringStream, name, ',');
 			getline(stringStream, type1, ',');
             getline(stringStream, type2, ',');
-
+            getline(stringStream, sTotal, ',');
+            total = stoi(sTotal);
 			getline(stringStream, sHP, ',');
 			hp = stoi(sHP);
 			getline(stringStream, sAttack, ',');
 			attack = stoi(sAttack);
 			getline(stringStream, sDefense, ',');
-			defense = stod(sDefense);
+			defense = stoi(sDefense);
             getline(stringStream, sSpAttack, ',');
-			sSpAttack = stod(sSpAttack);
+			spAttack = stoi(sSpAttack);
             getline(stringStream, sSpDef, ',');
-			spDef = stod(sSpDef);
+			spDef = stoi(sSpDef);
             getline(stringStream, sSpeed, ',');
-			speed = stod(sSpeed);            
+			speed = stoi(sSpeed);            
             getline(stringStream, sGen, ',');
-			gen = stod(sGen);
+			gen = stoi(sGen);
             getline(stringStream, sLegendary);
             if (sLegendary == "False")
             {
@@ -89,8 +91,7 @@ void ReadingCSVFile(std::string fileName, vector<Pokemon>& pokemon) {
             }
 
 			//each object will store a row
-			Pokemon setPoke(pokeDexNumber, name, type1, type2, hp, attack, defense, sSpAttack, spDef, speed, gen, legendary);
-            setPoke.setMoves(bool isBTree);
+			Pokemon setPoke(pokeDexNumber, name, type1, type2, total, hp, attack, defense, spAttack, spDef, speed, gen, legendary);
 			pokemon.push_back(setPoke);
 
 		}
@@ -99,21 +100,23 @@ void ReadingCSVFile(std::string fileName, vector<Pokemon>& pokemon) {
 
 
 //reading Move Set CSV
-void ReadingCSVFile(std::string fileName, vector<Moves>& moves) {
-		ifstream file(fileName);
+void ReadingCSVFile(std::string fileName, std::vector<Move>& moves) {
+		std::ifstream file(fileName);
 
 	//implementation of initializing the objects for each row
-	if (file.is_open()) {
+	if (file.is_open()) 
+    {
 
 		std::string fileRow;
 		//gets the headers of the file
 		getline(file, fileRow);
 
-		while (getline(file, fileRow)) {
+		while (getline(file, fileRow)) 
+        {
 
-			istringstream stringStream(fileRow);
+			std::istringstream stringStream(fileRow);
 
-            std::string sMoveNum
+            std::string sMoveNum;
             int moveNum;
 			std::string name;
 			std::string type;
@@ -128,49 +131,111 @@ void ReadingCSVFile(std::string fileName, vector<Moves>& moves) {
             std::string sGen;
             int gen;
 
-			getline(stringStream, sMoveNum, ',');
+			getline(stringStream, sMoveNum, ';');
             moveNum = stoi(sMoveNum);
-			getline(stringStream, name, ',');
-			getline(stringStream, type, ',');
-            getline(stringStream, category, ',');
-            getline(stringStream, contest, ',');
-			getline(stringStream, sPP, ',');
+			getline(stringStream, name, ';');
+			getline(stringStream, type, ';');
+            getline(stringStream, category, ';');
+            getline(stringStream, contest, ';');
+			getline(stringStream, sPP, ';');
 			pp = stoi(sPP);
-			getline(stringStream, sPower, ',');
-			power = stoi(sPower);
-			getline(stringStream, sAccuracy, ',');
-			accuracy = stod(sAccuracy);
-            getline(stringStream, sGen,);
-			gen = stod(sGen);
+			getline(stringStream, sPower, ';');
+			if (sPower == "None")
+			{
+				power = 0;
+			}
+			else
+			{
+				power = stoi(sPower);
+			}
+			getline(stringStream, sAccuracy, ';');
+			if (sAccuracy== "None")
+			{
+				accuracy = 0;
+			}
+			else
+			{
+				accuracy = stoi(sAccuracy);
+			}
+            getline(stringStream, sGen);
+			gen = stoi(sGen);
 
 			//each object will store a row
-			Moves setMoves(moveNum, name, type, category, contest, pp, power, accuracy, gen);
-			moves.push_back(setMoves)
+			Move setMoves(moveNum, name, type, category, contest, pp, power, accuracy, gen);
+			moves.push_back(setMoves);
 		}
 	}
 }
 
+bool binarySearch(std::vector<Pokemon>& _pokemon, std::string target)
+{
+	int left = 0;
+	int mid = 0;
+	int right = _pokemon.size();
+
+	while (left < right)
+	{
+		if (target == _pokemon[mid].getName())
+		{
+			return true;
+		}
+
+		mid = left + (right - 1) / 2;
+		if (target > _pokemon[mid].getName())
+		{
+			left = mid + 1;
+		}
+		else if (target < _pokemon[mid].getName())
+		{
+			right = mid;
+		}
+	}
+	return false;
+}
 
 int main()
 {
     std::vector<Pokemon> pokemon;
-    std::vector<Moves> moveSet;
-    std::vector<Moves> selectedMoves;
+    std::vector<Move> moveSet;
+    std::vector<Move> selectedMoves;
 
     ReadingCSVFile("pokemon.csv", pokemon);
     ReadingCSVFile("move-data.csv", moveSet);
 
-
+    
+    sort(pokemon.begin(), pokemon.end(), [](Pokemon& poke1, Pokemon& poke2)
+    {
+        return poke1.getName() < poke2.getName();
+    });
     //Here is where we will do the b tree and hash map?
 
 
     std::string selectedPokemon;
-    std::cout << "Enter a Pokemon: ";
+    std::cout << "Enter a Pokemon (case-sensitive): ";
     std::cin >> selectedPokemon;
     
+	if (!binarySearch(pokemon, selectedPokemon))
+	{
+		std::cout << "Pokemon not found!";
+	}
+	else
+	{
+		//do the thing
+	}
     //search if the selectedPokemon is in the b-tree or hash-map, maybe time it here to show the search timing
 
     //determine how to pick and select moves, but put it into the vector
+
+	//when comparing the moves to determine what is best, we need to do an stoi on power based on if it is (!= "None" as some moves do not do damage, for accuracy 
+	//same thing if that is taken into consideration)
+
+
+    //basically what is used to time the functions vvvv
+    auto start = std::chrono::steady_clock::now();
+    //instert into hash and b tree
+    auto end = std::chrono::steady_clock::now();
+
+    auto diff = end - start;
 
     
 }
