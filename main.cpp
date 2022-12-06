@@ -331,10 +331,10 @@ int main()
 		std::cout << "Finding optimal moves through B-Tree: " << diff.count() << " milliseconds" << std::endl;	
 		std::cout << "Possible Optimal Moveset with B-Tree " << selectedPokemon  << ": "<< std::endl; 
 		
-		std::cout << "1. " << optimalMovesBTree[0].getMoveName() << std::endl << 
-		"2. " << optimalMovesBTree[1].getMoveName() << std::endl <<
-		"3. " << optimalMovesBTree[2].getMoveName() << std::endl <<
-		"4. " << optimalMovesBTree[3].getMoveName() << std::endl << std::endl;
+		std::cout << "1. " << optimalBTreeMoves[0].getMoveName() << std::endl << 
+		"2. " << optimalBTreeMoves[1].getMoveName() << std::endl <<
+		"3. " << optimalBTreeMoves[2].getMoveName() << std::endl <<
+		"4. " << optimalBTreeMoves[3].getMoveName() << std::endl << std::endl;
 		
 
 		//Testing out Hashmap searching
