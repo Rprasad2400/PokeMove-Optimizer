@@ -56,12 +56,13 @@ void HashMap::remove(string key) {
 
 	}
 };
-vector<Move> HashMap::searchBestMove(string typemove) {
+
+vector<Move> HashMap::searchBestMove(Pokemon poke) {
 	vector<Move> s;
 	for (int i = 0; i < arrayList.size(); i++) {
 		Node* k = &arrayList[i];
 		while (k != nullptr) {
-			if (k->val.getMoveType() == typemove)
+			if (k->val.getMoveType() == poke.getType1() || k->val.getMoveType() == poke.getType2())
 			{
 				if (s.size() < 4) {
 					s.push_back(k->val);
@@ -85,34 +86,6 @@ vector<Move> HashMap::searchBestMove(string typemove) {
 	return s;
 }
 
-vector<Move> HashMap::searchBestMove(string typemove, string typemove2) {
-	vector<Move> s;
-	for (int i = 0; i < arrayList.size(); i++) {
-		Node* k = &arrayList[i];
-		while (k != nullptr) {
-			if (k->val.getMoveType() == typemove || k->val.getMoveType() == typemove2)
-				{
-					if (s.size() < 4) {
-						s.push_back(k->val);
-					}
-					else {
-						int min = 0;
-						for (int j = 0; j < 4; j++) {
-							if (s[min].getPower() > s[j].getPower()) {
-								min = j;
-							}
-
-						}
-						s[min] = k->val;
-					}
-
-				}
-			k = k->next;
-
-		}
-	}
-	return s;
-}
 
 Move HashMap::searchLinkedList(Node* k, string name) {
 	while (k != nullptr) {
