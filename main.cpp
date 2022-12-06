@@ -320,17 +320,16 @@ int main()
 	{
 		std::cout << "Pokemon not found!";
 	}
-
 	else
 	{
 		//Testing out B-Tree searching
-    	auto start = std::chrono::high_resolution_clock::now();
+    	auto startB = std::chrono::high_resolution_clock::now();
 		optimalBTreeMoves = search(pokemon[foundPokemon]);
-    	auto end = std::chrono::high_resolution_clock::now();
-		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-		std::cout << "Finding optimal moves through B-Tree: " << diff.count() << " milliseconds" << std::endl;	
+    	auto endB = std::chrono::high_resolution_clock::now();
+		auto diffB = std::chrono::duration_cast<std::chrono::milliseconds>(endB - startB);
+		std::cout << "Finding optimal moves through B-Tree: " << diffB.count() << " milliseconds" << std::endl;	
 		std::cout << "Possible Optimal Moveset with B-Tree " << selectedPokemon  << ": "<< std::endl; 
-		
+
 		std::cout << "1. " << optimalBTreeMoves[0].getMoveName() << std::endl << 
 		"2. " << optimalBTreeMoves[1].getMoveName() << std::endl <<
 		"3. " << optimalBTreeMoves[2].getMoveName() << std::endl <<
@@ -338,11 +337,11 @@ int main()
 		
 
 		//Testing out Hashmap searching
-		auto start = std::chrono::high_resolution_clock::now();
+		auto starthash = std::chrono::high_resolution_clock::now();
 		optimalHashMapMoves = searchBestMove(pokemon[foundPokemon]);
-		auto end = std::chrono::high_resolution_clock::now();
-		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-		std::cout << "Finding optimal moves through Hashmap: " << diff.count() << " milliseconds" << std::endl;	
+		auto endhash = std::chrono::high_resolution_clock::now();
+		auto diffhash = std::chrono::duration_cast<std::chrono::milliseconds>(endhash - starthash);
+		std::cout << "Finding optimal moves through Hashmap: " << diffhash.count() << " milliseconds" << std::endl;	
 		std::cout << "Possible Optimal Moveset with Hashmap " << selectedPokemon  << ": "<< std::endl; 
 		
 		std::cout << "1. " << optimalHashMapMoves[0].getMoveName() << std::endl << 
