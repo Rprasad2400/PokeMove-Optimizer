@@ -1,8 +1,10 @@
 #include "HashMap.h";
 #include "Move.h";
 #include "Pokemon.h";
-void HashMap::insertNode(Node* k, Move move) {
 
+//method to perform seperate chaining and insert Node
+void HashMap::insertNode(Node* k, Move move) {
+	//iterates until it can place the new Node
 	while (!(k->next == nullptr)) {
 		k = k->next;
 	}
@@ -12,6 +14,7 @@ void HashMap::insertNode(Node* k, Move move) {
 	}
 }
 
+//return the move based on Name
 Move HashMap::get(string key) {
 	int hashNum = hashFunction(key);
 	if (!arrayList[hashNum].hasValue) {
@@ -24,6 +27,7 @@ Move HashMap::get(string key) {
 
 };
 
+//returns the hash value based on name
 int HashMap::hashFunction(string name) {
 	int key = 0;
 	for (int i = 0; i < name.size(); i++) {
@@ -35,6 +39,7 @@ int HashMap::hashFunction(string name) {
 	return key;
 }
 
+//removes the value based on the name
 void HashMap::remove(string key) {
 	int hashNum = hashFunction(key);
 	if (!arrayList[hashNum].hasValue) {
@@ -58,6 +63,7 @@ void HashMap::remove(string key) {
 	}
 };
 
+//searches for the bestMove Possible and reurns a subset of 4 of the strongest moves for the type 
 vector<Move> HashMap::searchBestMove(Pokemon poke) {
 	vector<Move> s;
 	for (int i = 0; i < arrayList.size(); i++) {
@@ -90,7 +96,7 @@ vector<Move> HashMap::searchBestMove(Pokemon poke) {
 	return s;
 }
 
-
+//searches the LinkedList for the name
 Move HashMap::searchLinkedList(Node* k, string name) {
 	while (k != nullptr) {
 		if (k->val.getMoveName() == name) {
@@ -104,7 +110,7 @@ Move HashMap::searchLinkedList(Node* k, string name) {
 
 
 }
-
+//removes the Node from the index from the Linked List
 bool HashMap::removeNode(Node* k, string name) {
 	while (k->next != nullptr) {
 		Node* child = k->next;
@@ -120,19 +126,23 @@ bool HashMap::removeNode(Node* k, string name) {
 	return false;
 
 }
-
+//inserts the value in the HashMap
 void HashMap::insert(Move value) {
+	//returns the hash from the Move
 	int key = hashFunction(value.getMoveName());
 
 
+	//inserts the Node into the array
 	if (arrayList[key].hasValue) {
 		insertNode(&arrayList[key], value);
 	}
 	else {
 		arrayList[key] = Node(value);
 	}
+	//increases the num of elements
 	numelements++;
 
+	//resizes the array based on the load factor
 	if ((double(numelements) / double(arrayList.size())) > loadFactor) {
 		size = (arrayList.size() / loadFactor);
 		arrayList.resize(size);
