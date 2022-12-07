@@ -4,7 +4,7 @@
 #include "Pokemon.cpp"
 #include <unordered_set>
 #include <algorithm>
-#define MAXKEYS 10
+#define MAXKEYS 100000
 
 
 
@@ -19,25 +19,27 @@ class BTree{
     struct TreeNode{
         std::vector<Move> values;
         std::vector<TreeNode*> children; 
+        TreeNode* parent;
 
         TreeNode(){
             values = {};
             children = {};
+            parent = nullptr;
         }
 
         TreeNode(Move move){
             values = {move};
             children =  {};
+            parent = nullptr;
         }
     };
 
     //variables for overall Tree structure
-    int nodeLimit; 
     BTree::TreeNode* root;
 
     //helper functions for internal operations
     BTree::TreeNode* helperInsert(TreeNode* helpRoot, Move key);
-    void helperPreOrder(TreeNode* helpRoot, std::vector<Move> moves, std::unordered_set<std::string> types);
+    std::vector<Move> helperPreOrder(TreeNode* helpRoot, std::vector<Move>& moves, std::string type1, std::string type2);
 
 
     public: 
