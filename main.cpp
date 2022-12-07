@@ -26,8 +26,8 @@
 
 //Reading Pokemon CSV
 void ReadingCSVFile(std::string fileName, std::vector<Pokemon>& pokemon) {
-		std::ifstream file(fileName);
-
+	
+	std::ifstream file(fileName);
 	//implementation of initializing the objects for each row
 	if (file.is_open()) {
 
@@ -98,7 +98,6 @@ void ReadingCSVFile(std::string fileName, std::vector<Pokemon>& pokemon) {
 			//each object will store a row
 			Pokemon setPoke(pokeDexNumber, name, type1, type2, total, hp, attack, defense, spAttack, spDef, speed, gen, legendary);
 			pokemon.push_back(setPoke);
-
 		}
 	}
 }
@@ -106,8 +105,8 @@ void ReadingCSVFile(std::string fileName, std::vector<Pokemon>& pokemon) {
 
 //reading Move Set CSV
 void ReadingCSVFile(std::string fileName, std::vector<Move>& moves) {
-		std::ifstream file(fileName);
-
+	
+	std::ifstream file(fileName);
 	//implementation of initializing the objects for each row
 	if (file.is_open()) 
     {
@@ -175,7 +174,6 @@ void ReadingCSVFile(std::string fileName, std::vector<Move>& moves) {
 //For fabricating more moves
 void ReadingBabyNameCSVFile(std::string babyFile, std::vector<Move>& moves)
 {
-    //use this for the move index
     std::ifstream file(babyFile);
 
     //implementation of initializing the objects for each row
@@ -239,11 +237,6 @@ void ReadingBabyNameCSVFile(std::string babyFile, std::vector<Move>& moves)
 			moveIndexIterator++;
         }
     }
-
-
-
-    //in csv file, do this and store it into another variable, then do the same for the rest, then use the variables for the construction
-    //after that add it into the vector
 }
 
 
@@ -297,34 +290,37 @@ int main()
     std::cout << "Enter a Pokemon (case-sensitive): ";
     std::cin >> selectedPokemon;
     
+	//Search to see if the entered Pokemon is in the data set
 	int foundPokemon = binarySearch(pokemon, selectedPokemon);
 
 
 	if (foundPokemon == -1)
 	{
-		std::cout << "Pokemon not found!";
+		std::cout << "Pokemon not found!" << std::endl << "Try again!";
 	}
 	else
 	{
-		std::cout << pokemon[foundPokemon].getName() << std::endl;
-		//Testing out BTree searching
+		std::cout << pokemon[foundPokemon].getName() << ": " << std::endl;
+
 		for (int i = 0; i < moveSet.size(); i++)
 		{
 			//B.insert(moveSet[i]);
 			H.insert(moveSet[i]);
 		}
 
+		//Chrono is for getting when the function starts and ends, and then it subtracts to get how long it took
+		//Testing out B Tree
     	auto start = std::chrono::high_resolution_clock::now();
 		//optimalBTreeMoves = B.search(pokemon[foundPokemon]);
     	auto end = std::chrono::high_resolution_clock::now();
 		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-		std::cout << "Finding optimal moves through B-Tree: " << diff.count() << " milliseconds" << std::endl;	
+		std::cout << "Finding optimal moves through B-Tree: " << diff.count() << " milliseconds" << std::endl << std::endl;	
 		std::cout << "Possible Optimal Moveset with B-Tree " << selectedPokemon  << ": "<< std::endl; 
 
 		//std::cout << "1. " << optimalBTreeMoves[0].getMoveName() << std::endl << 
 		//"2. " << optimalBTreeMoves[1].getMoveName() << std::endl <<
 		//"3. " << optimalBTreeMoves[2].getMoveName() << std::endl <<
-		//"4. " << optimalBTreeMoves[3].getMoveName() << std::endl << std::endl;
+		//"4. " << optimalBTreeMoves[3].getMoveName() << std::endl << std::endl << std::endl;
 		
 
 		//Testing out Hashmap 
