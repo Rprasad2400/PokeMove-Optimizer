@@ -57,7 +57,7 @@ void BTree::helperPreOrder(TreeNode* helpRoot, std::vector<Move> moves, std::uno
 
 //public insertion function, no access to root
 void BTree::insert(Move key){
-    this->root = helperInsert(this->root, key);
+      this->root = helperInsert(this->root, key);
 }
 
 
@@ -67,8 +67,7 @@ BTree::TreeNode* BTree::helperInsert(TreeNode* helpRoot, Move key){
 
     if (helpRoot == nullptr){
     //this should never be the case, but checking just in case
-        std::cout << "Reached a null node" << std::endl;
-        return;
+        return new TreeNode(key);
     } else if (helpRoot->children.size() != 0){                         
         //if the node has children, append to those instead
         int i = 0;
@@ -109,7 +108,6 @@ BTree::TreeNode* BTree::helperInsert(TreeNode* helpRoot, Move key){
         } 
         //if no split occurred, no special function is needed
     } else {
-        helpRoot->children.push_back(&TreeNode(key));
         std::sort(helpRoot->children.begin(), helpRoot->children.end());
     }
 
