@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <queue>
 #include <time.h>
+#include <random>
 #include "Pokemon.cpp"
 #include "Move.cpp"
 #include "BTree.cpp"
@@ -186,10 +187,11 @@ void ReadingBabyNameCSVFile(std::string babyFile, std::vector<Move>& moves)
         getline(file, fileRow);
         int moveIndexIterator = 729;
 
+		std::srand(time(NULL));
         while (getline(file, fileRow) && moveIndexIterator < 150000) 
         {
             std::istringstream stringStream(fileRow);
-            std::srand(time(NULL));
+            
             int randomIndex;
 
             std::string index;
@@ -221,7 +223,6 @@ void ReadingBabyNameCSVFile(std::string babyFile, std::vector<Move>& moves)
 				80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 
 				165, 170, 175, 180, 185, 190, 195, 200, 205, 210, 215, 220, 225, 230, 235, 240, 
 				245, 250};
-
             randomIndex = rand() % 50;
             int attack = possibleAttacks[randomIndex];
 
@@ -230,7 +231,8 @@ void ReadingBabyNameCSVFile(std::string babyFile, std::vector<Move>& moves)
             int accuracy = possibleAccuracy[randomIndex];
 			int generation = 0;
 
-			std::cout << type << " " << category << " " << pp << " " << attack << " " << 
+			//Uncomment the line under if you wanna wait for a while ;)
+			//std::cout << type << " " << category << " " << pp << " " << attack << " " << accuracy << std::endl;
 
             Move setMove(moveIndexIterator, babyMoveName, type, category, contest, pp, attack, accuracy, generation);
             moves.push_back(setMove);
