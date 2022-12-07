@@ -1,14 +1,3 @@
-//create main function
-
-//create function to parse move data
-//use two different data structures here to measure time difference, this is the main project 
-//potentially make different data structures depending on priority feature for optimization
-
-//create function to parse pokemon data
-//assign 'best' moves here by searching through the move data strucutres
-//make sure to measure time to have an efficiency measure
-
-
 #include <iomanip>
 #include <iostream>
 #include <fstream>
@@ -244,10 +233,11 @@ int binarySearch(std::vector<Pokemon>& _pokemon, std::string target)
 {
 	int left = 0;
 	int right = _pokemon.size();
+	int mid;
 
-	while (left < right)
+	while (left <= right)
 	{
-		int mid = left + (right - left) / 2;
+		mid = left + (right - left) / 2;
 		if (target == _pokemon[mid].getName())
 		{
 			return mid;
@@ -304,23 +294,24 @@ int main()
 
 		for (int i = 0; i < moveSet.size(); i++)
 		{
-			//B.insert(moveSet[i]);
+			B.insert(moveSet[i]);
 			H.insert(moveSet[i]);
 		}
 
 		//Chrono is for getting when the function starts and ends, and then it subtracts to get how long it took
 		//Testing out B Tree
     	auto start = std::chrono::high_resolution_clock::now();
-		//optimalBTreeMoves = B.search(pokemon[foundPokemon]);
+		optimalBTreeMoves = B.search(pokemon[foundPokemon]);
     	auto end = std::chrono::high_resolution_clock::now();
 		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 		std::cout << "Finding optimal moves through B-Tree: " << diff.count() << " milliseconds" << std::endl << std::endl;	
 		std::cout << "Possible Optimal Moveset with B-Tree " << selectedPokemon  << ": "<< std::endl; 
 
-		//std::cout << "1. " << optimalBTreeMoves[0].getMoveName() << std::endl << 
-		//"2. " << optimalBTreeMoves[1].getMoveName() << std::endl <<
-		//"3. " << optimalBTreeMoves[2].getMoveName() << std::endl <<
-		//"4. " << optimalBTreeMoves[3].getMoveName() << std::endl << std::endl << std::endl;
+
+		std::cout << "1. " << optimalBTreeMoves[0].getMoveName() << std::endl << 
+		"2. " << optimalBTreeMoves[1].getMoveName() << std::endl <<
+		"3. " << optimalBTreeMoves[2].getMoveName() << std::endl <<
+		"4. " << optimalBTreeMoves[3].getMoveName() << std::endl << std::endl << std::endl;
 		
 
 		//Testing out Hashmap 
@@ -331,10 +322,10 @@ int main()
 		std::cout << "Finding optimal moves through Hashmap: " << diff.count() << " milliseconds" << std::endl;	
 		std::cout << "Possible Optimal Moveset with Hashmap " << selectedPokemon  << ": "<< std::endl; 
 		
-		std::cout << "1. " << optimalHashMapMoves[0].getMoveName() << ": " << optimalHashMapMoves[0].getPower() << std::endl << 
-		"2. " << optimalHashMapMoves[1].getMoveName() << ": " << optimalHashMapMoves[1].getPower() << std::endl <<
-		"3. " << optimalHashMapMoves[2].getMoveName() << ": " << optimalHashMapMoves[2].getPower() << std::endl <<
-		"4. " << optimalHashMapMoves[3].getMoveName() << ": " << optimalHashMapMoves[3].getPower() << std::endl;
+		std::cout << "1. " << optimalHashMapMoves[0].getMoveName() << std::endl << 
+		"2. " << optimalHashMapMoves[1].getMoveName() << std::endl <<
+		"3. " << optimalHashMapMoves[2].getMoveName() << std::endl <<
+		"4. " << optimalHashMapMoves[3].getMoveName() << std::endl;
 		
 	}
 
