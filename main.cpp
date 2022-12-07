@@ -230,6 +230,8 @@ void ReadingBabyNameCSVFile(std::string babyFile, std::vector<Move>& moves)
             int accuracy = possibleAccuracy[randomIndex];
 			int generation = 0;
 
+			std::cout << type << " " << category << " " << pp << " " << attack << " " << 
+
             Move setMove(moveIndexIterator, babyMoveName, type, category, contest, pp, attack, accuracy, generation);
             moves.push_back(setMove);
 			moveIndexIterator++;
@@ -246,24 +248,22 @@ void ReadingBabyNameCSVFile(std::string babyFile, std::vector<Move>& moves)
 int binarySearch(std::vector<Pokemon>& _pokemon, std::string target)
 {
 	int left = 0;
-	int mid = 0;
 	int right = _pokemon.size();
 
 	while (left < right)
 	{
+		int mid = left + (right - left) / 2;
 		if (target == _pokemon[mid].getName())
 		{
 			return mid;
 		}
-
-		mid = left + (right - 1) / 2;
 		if (target > _pokemon[mid].getName())
 		{
 			left = mid + 1;
 		}
 		else if (target < _pokemon[mid].getName())
 		{
-			right = mid;
+			right = mid - 1;
 		}
 	}
 	return -1;
@@ -278,31 +278,11 @@ int main()
 	std::vector<Move> optimalHashMapMoves;
 	BTree B;
 	HashMap H;
-	//std::priority_queue <Move, std::vector<Move>, HigherPower> selectedMovesPrio;
 
-
+	//Reading the data sets
     ReadingCSVFile("pokemon.csv", pokemon);
     ReadingCSVFile("move-data.csv", moveSet);
 	ReadingBabyNameCSVFile("NationalNames.csv", moveSet);
-	//int size = moveSet.size();
-	//std::cout << moveSet[140001].getMoveName() << std::endl;
-	/*
-    selectedMovesPrio.push(moveSet[0]);
-	selectedMovesPrio.push(moveSet[100]);
-	selectedMovesPrio.push(moveSet[1000]);
-	selectedMovesPrio.push(moveSet[300]);
-
-	Move move = selectedMovesPrio.top();
-	std::cout << move.getMoveName() << std::endl;
-	selectedMovesPrio.pop();
-
-	move = selectedMovesPrio.top();
-	std::cout << move.getMoveName() << std::endl;
-	selectedMovesPrio.pop();
-
-	move = selectedMovesPrio.top();
-	std::cout << move.getMoveName() << std::endl;
-	*/
 
 	//just to sort and find the Pokemon faster, we are comparing the data structure through moves
     sort(pokemon.begin(), pokemon.end(), [](Pokemon& poke1, Pokemon& poke2)
@@ -316,7 +296,7 @@ int main()
     std::cin >> selectedPokemon;
     
 	int foundPokemon = binarySearch(pokemon, selectedPokemon);
-	std::cout << pokemon[foundPokemon].getName() << std::endl;
+
 
 	if (foundPokemon == -1)
 	{
@@ -324,25 +304,25 @@ int main()
 	}
 	else
 	{
+		std::cout << pokemon[foundPokemon].getName() << std::endl;
 		//Testing out BTree searching
-				//Testing out BTree searching
 		for (int i = 0; i < moveSet.size(); i++)
 		{
-			B.insert(moveSet[i]);
+			//B.insert(moveSet[i]);
 			H.insert(moveSet[i]);
 		}
-		
+
     	auto start = std::chrono::high_resolution_clock::now();
-		optimalBTreeMoves = B.search(pokemon[foundPokemon]);
+		//optimalBTreeMoves = B.search(pokemon[foundPokemon]);
     	auto end = std::chrono::high_resolution_clock::now();
 		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 		std::cout << "Finding optimal moves through B-Tree: " << diff.count() << " milliseconds" << std::endl;	
 		std::cout << "Possible Optimal Moveset with B-Tree " << selectedPokemon  << ": "<< std::endl; 
 
-		std::cout << "1. " << optimalBTreeMoves[0].getMoveName() << std::endl << 
-		"2. " << optimalBTreeMoves[1].getMoveName() << std::endl <<
-		"3. " << optimalBTreeMoves[2].getMoveName() << std::endl <<
-		"4. " << optimalBTreeMoves[3].getMoveName() << std::endl << std::endl;
+		//std::cout << "1. " << optimalBTreeMoves[0].getMoveName() << std::endl << 
+		//"2. " << optimalBTreeMoves[1].getMoveName() << std::endl <<
+		//"3. " << optimalBTreeMoves[2].getMoveName() << std::endl <<
+		//"4. " << optimalBTreeMoves[3].getMoveName() << std::endl << std::endl;
 		
 
 		//Testing out Hashmap 
@@ -353,24 +333,11 @@ int main()
 		std::cout << "Finding optimal moves through Hashmap: " << diff.count() << " milliseconds" << std::endl;	
 		std::cout << "Possible Optimal Moveset with Hashmap " << selectedPokemon  << ": "<< std::endl; 
 		
-		std::cout << "1. " << optimalHashMapMoves[0].getMoveName() << std::endl << 
-		"2. " << optimalHashMapMoves[1].getMoveName() << std::endl <<
-		"3. " << optimalHashMapMoves[2].getMoveName() << std::endl <<
-		"4. " << optimalHashMapMoves[3].getMoveName() << std::endl;
+		std::cout << "1. " << optimalHashMapMoves[0].getMoveName() << ": " << optimalHashMapMoves[0].getPower() << std::endl << 
+		"2. " << optimalHashMapMoves[1].getMoveName() << ": " << optimalHashMapMoves[1].getPower() << std::endl <<
+		"3. " << optimalHashMapMoves[2].getMoveName() << ": " << optimalHashMapMoves[2].getPower() << std::endl <<
+		"4. " << optimalHashMapMoves[3].getMoveName() << ": " << optimalHashMapMoves[3].getPower() << std::endl;
 		
-
-		/*
-		if (pokemon[foundPokemon].getType1() > pokemon[foundPokemon].getSpAttack())
-		{
-			//search for the move that is physical and has higher power
-			searchfunction(category "physical")
-		}
-		else
-		{
-			//search for the move that is special and has higher power
-			searchfunction(category "special")
-		}
-		*/
 	}
 
 };
