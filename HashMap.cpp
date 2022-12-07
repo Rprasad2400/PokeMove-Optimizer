@@ -63,7 +63,7 @@ vector<Move> HashMap::searchBestMove(Pokemon poke) {
 	for (int i = 0; i < arrayList.size(); i++) {
 		Node* k = &arrayList[i];
 		while (k != nullptr) {
-			if (k->val.getMoveType() == poke.getType1() || k->val.getMoveType() == poke.getType2())
+			if (k->val.getMoveType() == poke.getType1() || ((k->val.getMoveType() == poke.getType2()) && poke.getType2() != ""))
 			{
 				if (s.size() < 4) {
 					s.push_back(k->val);
@@ -76,7 +76,10 @@ vector<Move> HashMap::searchBestMove(Pokemon poke) {
 						}
 
 					}
-					s[min] = k->val;
+					if(s[min].getPower() < k->val.getPower()){
+						s[min] = k->val;
+					}
+					
 				}
 
 			}
@@ -139,4 +142,3 @@ void HashMap::insert(Move value) {
 
 
 };
-
